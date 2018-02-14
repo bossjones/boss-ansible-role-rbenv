@@ -10,7 +10,7 @@ boss__rbenv_clean_up: false
 
 boss__rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
-bossjones__rbenv_plugins:
+boss__rbenv_plugins:
         - { name: "rbenv-vars",         repo: "https://github.com/rbenv/rbenv-vars.git",         version: "master" }
         - { name: "ruby-build",         repo: "https://github.com/rbenv/ruby-build.git",         version: "master" }
         - { name: "rbenv-default-gems", repo: "https://github.com/rbenv/rbenv-default-gems.git", version: "master" }
@@ -22,7 +22,7 @@ bossjones__rbenv_plugins:
         - { name: "rbenv-each",         repo: "https://github.com/rbenv/rbenv-each.git",         version: "master" }
         - { name: "rbenv-aliases",      repo: "https://github.com/tpope/rbenv-aliases.git",      version: "master" }
 
-boss__rbenv_root: "{% if bossjones__rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+boss__rbenv_root: "{% if boss__rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
 boss__rbenv_users: []
 

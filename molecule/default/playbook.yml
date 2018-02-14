@@ -22,21 +22,21 @@
     - role: boss-ansible-role-rbenv
       bossjones__user: vagrant
       bossjones__group: vagrant
-      bossjones__default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
-      bossjones__rbenv_extra_depends:
+      boss__rbenv_default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
+      boss__rbenv_extra_depends:
       - libjemalloc1
       - libjemalloc-dev
       - ctags
-      bossjones__rbenv:
+      boss__rbenv:
         env: user
         version: v1.1.1
         default_ruby: 2.4.2
         rubies:
         - version: 2.4.2
-      bossjones__rbenv_users:
+      boss__rbenv_users:
       - "{{ bossjones__user }}"
-      bossjones__rbenv_repo: "https://github.com/rbenv/rbenv.git"
-      bossjones__rbenv_plugins:
+      boss__rbenv_repo: "https://github.com/rbenv/rbenv.git"
+      boss__rbenv_plugins:
         - { name: "rbenv-vars",         repo: "https://github.com/rbenv/rbenv-vars.git",         version: "master" }
         - { name: "ruby-build",         repo: "https://github.com/rbenv/ruby-build.git",         version: "master" }
         - { name: "rbenv-default-gems", repo: "https://github.com/rbenv/rbenv-default-gems.git", version: "master" }
@@ -48,6 +48,6 @@
         - { name: "rbenv-each",         repo: "https://github.com/rbenv/rbenv-each.git",         version: "master" }
         - { name: "rbenv-aliases",      repo: "https://github.com/tpope/rbenv-aliases.git",      version: "master" }
 
-      bossjones__rbenv_root: "{% if bossjones__rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+      boss__rbenv_root: "{% if boss__rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
 

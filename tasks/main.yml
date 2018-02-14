@@ -1,6 +1,6 @@
 ---
 - name: include env vars
-  include_vars: "{{ bossjones__rbenv.env }}.yml"
+  include_vars: "{{ boss__rbenv.env }}.yml"
 
 - include: apt_build_depends.yml
   when: ansible_pkg_mgr == 'apt'
@@ -21,9 +21,9 @@
   when: rbenv_tmpdir is undefined
 
 - include: system_install.yml
-  when: bossjones__rbenv.env == "system"
+  when: boss__rbenv.env == "system"
 - include: user_install.yml
-  when: bossjones__rbenv.env != "system"
+  when: boss__rbenv.env != "system"
 
 
 - name: Register home directory for {{ bossjones__user }}
@@ -56,4 +56,4 @@
     recurse: yes
     owner: "{{ bossjones__user }}"
     group: "{{ bossjones__user }}"
-  when: bossjones__rbenv.env != "system"
+  when: boss__rbenv.env != "system"
