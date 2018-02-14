@@ -24,3 +24,36 @@
   when: bossjones__rbenv.env == "system"
 - include: user_install.yml
   when: bossjones__rbenv.env != "system"
+
+
+- name: Register home directory for {{ bossjones__user }}
+  shell: >
+    getent passwd {{ bossjones__user }} | cut -d: -f6
+  changed_when: false
+  register: linux_user_home
+
+- name: Register current login shell for {{ bossjones__user }}
+  shell: >
+    getent passwd {{ bossjones__user }} | cut -d: -f7
+  changed_when: false
+  register: linux_user_shell
+
+- name: Set facts
+  set_fact:
+    boss__rbenv_user_home: "{{ linux_user_home.stdout }}"
+    boss__rbenv_user_shell: "{{ linux_user_shell.stdout }}"
+
+- name: assert home directory is detected
+  assert: { that: boss__rbenv_user_home != "" }
+
+- name: assert current shell is detected
+  assert: { that: boss__rbenv_user_shell != "" }
+
+- name: "chown {{ bossjones__user }}:{{ bossjones__user }} -R {{ boss__rbenv_user_home }}/"
+  file:
+    path: "{{ boss__rbenv_user_home }}"
+    state: directory
+    recurse: yes
+    owner: "{{ bossjones__user }}"
+    group: "{{ bossjones__user }}"
+  when: bossjones__rbenv.env != "system"

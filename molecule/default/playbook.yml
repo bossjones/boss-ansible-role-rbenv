@@ -10,11 +10,19 @@
     - role: boss-ansible-role-core
     - role: boss-ansible-role-fact
     - role: boss-ansible-role-environment
+    - role: boss-ansible-role-users
+      boss__users_users:
+      - username: vagrant
+        groups: ['sudo', 'adm', 'vagrant']
+        append: yes
+        uid: 1000
+        gid: 1000
+        home: /home/vagrant
 
     - role: boss-ansible-role-rbenv
-      bossjones__user: root
-      bossjones__group: root
-      # bossjones__default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
+      bossjones__user: vagrant
+      bossjones__group: vagrant
+      bossjones__default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
       bossjones__rbenv_extra_depends:
       - libjemalloc1
       - libjemalloc-dev

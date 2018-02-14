@@ -37,6 +37,14 @@ boss__rbenv_apt_packages:
 - libxml2-dev
 - libxslt1-dev
 - zlib1g-dev
+- pkg-config
+- wget
+- curl
+- make
+- gcc
+- autoconf
+- automake
+- libtool
 boss__rbenv_dnf_packages:
 - gcc
 - openssl-devel

@@ -126,7 +126,15 @@ test:
 	molecule test --destroy=always
 
 bootstrap: venv
-travis: bootstrap venv ci
+travis:
+	$(MAKE) bootstrap
+	$(MAKE) venv
+	$(MAKE) docker_clean
+	$(MAKE) docker_build_ubuntu
+	$(MAKE) start_delegated_docker
+	$(MAKE) ci
+	$(MAKE) docker_clean
+
 
 .PHONY: docker_build_ubuntu
 docker_build_ubuntu: ## Builds SD Ubuntu docker container
@@ -138,8 +146,8 @@ start_delegated_docker:
 	--privileged=true \
 	--cap-add=SYS_ADMIN \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-	--name boss-ansible-role-rbenv-trusty \
-	--hostname boss-ansible-role-rbenv-trusty \
+	--name boss-ansible-role-rbenv-xenial \
+	--hostname boss-ansible-role-rbenv-xenial \
 	-it $(TEST_IMAGE_NAME):latest sleep infinity & wait
 
 stop_delegated_docker:
@@ -187,7 +195,12 @@ travis-osx:
 	$(MAKE) venv-osx
 	$(MAKE) upgrade-setuptools
 	$(MAKE) venv-osx
+	$(MAKE) docker_clean
+	$(MAKE) docker_build_ubuntu
+	$(MAKE) start_delegated_docker
 	$(MAKE) ci
+	$(MAKE) docker_clean
+
 
 # OSX Order of operations, make travis-osx; . venv/bin/activate; make upgrade-setuptools; make travis-osx;
 
