@@ -5,6 +5,7 @@
   become_method: sudo
   environment:
     SHELL: /bin/bash
+    TERM: xterm
   roles:
     - role: boss-ansible-role-core
     - role: boss-ansible-role-fact
@@ -13,7 +14,7 @@
     - role: boss-ansible-role-rbenv
       bossjones__user: root
       bossjones__group: root
-      bossjones__default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
+      # bossjones__default_gems_file: "/home/{{ bossjones__user }}/.dotfiles/ruby/default-gems"
       bossjones__rbenv_extra_depends:
       - libjemalloc1
       - libjemalloc-dev
