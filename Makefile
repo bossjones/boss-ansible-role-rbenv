@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 username                  := bossjones
-test_container_name       := ubuntu-trusty
+test_container_name       := boss-ansible-role-rbenv-xenial
 TEST_IMAGE_NAME           := $(username)/$(test_container_name)
 
 # verify that certain variables have been defined off the bat
@@ -156,7 +156,7 @@ stop_delegated_docker:
 
 # SOURCE: https://github.com/lispmeister/rpi-python3/blob/534ee5ab592f0ab0cdd04a202ca492846ab12601/Makefile
 exited := $(shell docker ps -a -q -f status=exited)
-kill   := $(shell docker ps | grep ubuntu-trusty | awk '{print $$1}')
+kill   := $(shell docker ps | grep boss-ansible-role-rbenv-xenial | awk '{print $$1}')
 # untagged := $(shell (docker images | grep "^<none>" | awk -F " " '{print $$3}'))
 # dangling := $(shell docker images -f "dangling=true" -q)
 # tag := $(shell docker images | grep "$(DOCKER_IMAGE_NAME)" | grep "$(DOCKER_IMAGE_VERSION)" |awk -F " " '{print $$3}')
