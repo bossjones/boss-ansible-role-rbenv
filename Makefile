@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 username                  := bossjones
-test_container_name       := ubuntu-trusty
+test_container_name       := boss-ansible-role-rbenv-xenial
 TEST_IMAGE_NAME           := $(username)/$(test_container_name)
 
 # verify that certain variables have been defined off the bat
@@ -126,7 +126,15 @@ test:
 	molecule test --destroy=always
 
 bootstrap: venv
-travis: bootstrap venv ci
+travis:
+	$(MAKE) bootstrap
+	$(MAKE) venv
+	$(MAKE) docker_clean
+	$(MAKE) docker_build_ubuntu
+	$(MAKE) start_delegated_docker
+	$(MAKE) ci
+	$(MAKE) docker_clean
+
 
 .PHONY: docker_build_ubuntu
 docker_build_ubuntu: ## Builds SD Ubuntu docker container
@@ -138,8 +146,8 @@ start_delegated_docker:
 	--privileged=true \
 	--cap-add=SYS_ADMIN \
 	-v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-	--name boss-ansible-role-rbenv-trusty \
-	--hostname boss-ansible-role-rbenv-trusty \
+	--name boss-ansible-role-rbenv-xenial \
+	--hostname boss-ansible-role-rbenv-xenial \
 	-it $(TEST_IMAGE_NAME):latest sleep infinity & wait
 
 stop_delegated_docker:
@@ -148,7 +156,7 @@ stop_delegated_docker:
 
 # SOURCE: https://github.com/lispmeister/rpi-python3/blob/534ee5ab592f0ab0cdd04a202ca492846ab12601/Makefile
 exited := $(shell docker ps -a -q -f status=exited)
-kill   := $(shell docker ps | grep ubuntu-trusty | awk '{print $$1}')
+kill   := $(shell docker ps | grep boss-ansible-role-rbenv-xenial | awk '{print $$1}')
 # untagged := $(shell (docker images | grep "^<none>" | awk -F " " '{print $$3}'))
 # dangling := $(shell docker images -f "dangling=true" -q)
 # tag := $(shell docker images | grep "$(DOCKER_IMAGE_NAME)" | grep "$(DOCKER_IMAGE_VERSION)" |awk -F " " '{print $$3}')
@@ -187,7 +195,12 @@ travis-osx:
 	$(MAKE) venv-osx
 	$(MAKE) upgrade-setuptools
 	$(MAKE) venv-osx
+	$(MAKE) docker_clean
+	$(MAKE) docker_build_ubuntu
+	$(MAKE) start_delegated_docker
 	$(MAKE) ci
+	$(MAKE) docker_clean
+
 
 # OSX Order of operations, make travis-osx; . venv/bin/activate; make upgrade-setuptools; make travis-osx;
 

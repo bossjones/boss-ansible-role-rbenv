@@ -1,2 +1,59 @@
 ---
-# tasks file for boss-ansible-role-rbenv
+- name: include env vars
+  include_vars: "{{ boss__rbenv.env }}.yml"
+
+- include: apt_build_depends.yml
+  when: ansible_pkg_mgr == 'apt'
+- include: yum_build_depends.yml
+  when: ansible_pkg_mgr == 'yum'
+- include: dnf_build_depends.yml
+  when: ansible_pkg_mgr == 'dnf'
+# - include: pacman_build_depends.yml # Arch Linux
+#   when: ansible_pkg_mgr == 'pacman'
+- include: homebrew_build_depends.yml
+  when: ansible_os_family == 'Darwin'
+
+- name: set rbenv_owner
+  set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
+
+- name: set tmp directory path
+  set_fact: rbenv_tmpdir="{{ ansible_env.TMPDIR | default('/tmp') }}"
+  when: rbenv_tmpdir is undefined
+
+- include: system_install.yml
+  when: boss__rbenv.env == "system"
+- include: user_install.yml
+  when: boss__rbenv.env != "system"
+
+
+- name: Register home directory for {{ bossjones__user }}
+  shell: >
+    getent passwd {{ bossjones__user }} | cut -d: -f6
+  changed_when: false
+  register: linux_user_home
+
+- name: Register current login shell for {{ bossjones__user }}
+  shell: >
+    getent passwd {{ bossjones__user }} | cut -d: -f7
+  changed_when: false
+  register: linux_user_shell
+
+- name: Set facts
+  set_fact:
+    boss__rbenv_user_home: "{{ linux_user_home.stdout }}"
+    boss__rbenv_user_shell: "{{ linux_user_shell.stdout }}"
+
+- name: assert home directory is detected
+  assert: { that: boss__rbenv_user_home != "" }
+
+- name: assert current shell is detected
+  assert: { that: boss__rbenv_user_shell != "" }
+
+- name: "chown {{ bossjones__user }}:{{ bossjones__user }} -R {{ boss__rbenv_user_home }}/"
+  file:
+    path: "{{ boss__rbenv_user_home }}"
+    state: directory
+    recurse: yes
+    owner: "{{ bossjones__user }}"
+    group: "{{ bossjones__user }}"
+  when: boss__rbenv.env != "system"

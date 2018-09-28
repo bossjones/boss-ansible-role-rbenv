@@ -1,2 +1,65 @@
 ---
-# defaults file for boss-ansible-role-rbenv
+boss__rbenv:
+  env: system
+  version: v1.0.0
+  default_ruby: 2.4.2
+  rubies:
+    - version: 2.4.2
+
+boss__rbenv_clean_up: false
+
+boss__rbenv_repo: "https://github.com/rbenv/rbenv.git"
+
+boss__rbenv_plugins:
+        - { name: "rbenv-vars",         repo: "https://github.com/rbenv/rbenv-vars.git",         version: "master" }
+        - { name: "ruby-build",         repo: "https://github.com/rbenv/ruby-build.git",         version: "master" }
+        - { name: "rbenv-default-gems", repo: "https://github.com/rbenv/rbenv-default-gems.git", version: "master" }
+        - { name: "rbenv-installer",    repo: "https://github.com/rbenv/rbenv-installer.git",    version: "master" }
+        - { name: "rbenv-update",       repo: "https://github.com/rkh/rbenv-update.git",         version: "master" }
+        - { name: "rbenv-whatis",       repo: "https://github.com/rkh/rbenv-whatis.git",         version: "master" }
+        - { name: "rbenv-use",          repo: "https://github.com/rkh/rbenv-use.git",            version: "master" }
+        - { name: "rbenv-ctags",        repo: "https://github.com/tpope/rbenv-ctags.git",        version: "master" }
+        - { name: "rbenv-each",         repo: "https://github.com/rbenv/rbenv-each.git",         version: "master" }
+        - { name: "rbenv-aliases",      repo: "https://github.com/tpope/rbenv-aliases.git",      version: "master" }
+
+boss__rbenv_root: "{% if boss__rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+
+boss__rbenv_users: []
+
+boss__rbenv_extra_depends: []
+boss__rbenv_apt_packages:
+- build-essential
+- git
+- libcurl4-openssl-dev
+- libffi-dev
+- libreadline-dev
+- libssl-dev
+- libxml2-dev
+- libxslt1-dev
+- zlib1g-dev
+- pkg-config
+- wget
+- curl
+- make
+- gcc
+- autoconf
+- automake
+- libtool
+boss__rbenv_dnf_packages:
+- gcc
+- openssl-devel
+- libyaml-devel
+- readline-devel
+- zlib-devel
+- libffi-devel
+- git
+boss__rbenv_yum_packages:
+- bzip2
+- gcc
+- git
+- libffi-devel
+- libyaml-devel
+- openssl-devel
+- readline-devel
+- zlib-devel
+boss__rbenv_user_profile: true
